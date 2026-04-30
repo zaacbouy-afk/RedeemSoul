@@ -112,6 +112,7 @@ class Main: # where run() happens
                 self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
                 self.WindowManage.UrlSearch('outlook.com') # default (customisable)
                 self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
+                # add more if you want to !
                 break
             
 m1=Main()
