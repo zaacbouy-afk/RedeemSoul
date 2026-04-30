@@ -109,6 +109,7 @@ class Main: # where run() happens
             if key=='s': # default failsafe key (customisable) 
                 self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
                 self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
+                time.sleep(0.1) # CANNOT BE CHANGED FOR FUNCTIONALITY
                 self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
                 self.WindowManage.UrlSearch('outlook.com') # default (customisable)
                 self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
