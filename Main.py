@@ -6,7 +6,7 @@ import shutil as shut
 import subprocess as subp
 import os
 
-allWin = []
+allWin = [] # stores all windows in an empty array, so it can be updated
 
 EXCEPTIONS = {
     "Program Manager",
@@ -15,14 +15,14 @@ EXCEPTIONS = {
     "Visual Studio Code",
 }
 
-class WindowManager:
+class WindowManager: # manages windows and their state in general in this program
     
     def __init__(self):
         pass
 
     def CloseWin(self):
         for window in allWin:
-            if window.title and not any(exc in window.title for exc in EXCEPTIONS): #closes everything but exception (if it contains part of exception strings)
+            if window.title and not any(exc in window.title for exc in EXCEPTIONS): # closes everything but exception (if it contains part of exception strings)
                 try:
                     window.close()
                 except Exception:
@@ -30,7 +30,7 @@ class WindowManager:
     
     def OpenBrowser  (self, input : str ='about:blank'):
 
-        if input.startswith('http') or '.' in input:
+        if input.startswith('http') or '.' in input:  # used for the checking the search type and making the first tab the correct search type
             url=input if input.startswith('http') else 'https://' + input
         else:
             url = 'https://www.google.com/search?q=' + input.replace(' ', '+')
@@ -44,7 +44,7 @@ class WindowManager:
                 subp.Popen([path, '--new-window', url])
                 return
             
-            # fallback for Windows where browsers aren't on PATH
+            # fallback for Windows where browsers arent on PATH
 
         windows_paths = [
             os.path.expandvars(r'%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe'),
@@ -55,25 +55,24 @@ class WindowManager:
             os.path.expandvars(r'%PROGRAMFILES(X86)%\Mozilla Firefox\firefox.exe'),
             os.path.expandvars(r'%PROGRAMFILES(X86)%\Microsoft\Edge\Application\msedge.exe'),
             ]
+        
         for path in windows_paths:
             if os.path.exists(path):
                 subp.Popen([path, '--new-window', url])
                 return
             
-        wb.get().open(url)
+        wb.get().open(url) # last fallback opening a new tab instead of window 
             
 
     def UrlSearch(self,url : str):
         
         if not url.startswith('http'):
             url = 'https://' + url
-        
         wb.open_new_tab(url)
     
     def QuerySearch(self,query : str):
 
         url = 'https://www.google.com/search?q=' + query.replace(' ', '+')
-
         wb.open_new_tab(url)
 
 class KeyBoardManager:
@@ -98,21 +97,22 @@ class Main:
 
     def RefreshWin(self):
         global allWin
-        allWin = gw.getAllWindows()#updates all current windows when called
+        allWin = gw.getAllWindows() # updates all current windows when called
 
-    def __init__(self):
+    def __init__(self): # calling the classes into 'Main' class
         self.WindowManage=WindowManager()
         self.keyl=KeyListener()
     
-    def run(self):
+    def run(self): # Customisable section
         while True:
             key = self.keyl.StartListen(None)
-            if key=='s':
-                self.RefreshWin()
-                self.WindowManage.CloseWin()
+            if key=='s': # changable failsafe key 
+                self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
+                self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
                 self.WindowManage.OpenBrowser('wow so cool')
                 self.WindowManage.UrlSearch('outlook.com')
                 self.WindowManage.QuerySearch('how to pet my dog')
+                break
             
 m1=Main()
 m1.run()
