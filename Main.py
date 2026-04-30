@@ -106,12 +106,12 @@ class Main: # where run() happens
     def run(self): # Customisable section
         while True:
             key = self.keyl.StartListen(None)
-            if key=='s': # changable failsafe key 
+            if key=='s': # default failsafe key (customisable) 
                 self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
                 self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                self.WindowManage.OpenBrowser('wow so cool')
-                self.WindowManage.UrlSearch('outlook.com')
-                self.WindowManage.QuerySearch('how to pet my dog')
+                self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
+                self.WindowManage.UrlSearch('outlook.com') # default (customisable)
+                self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
                 break
             
 m1=Main()
