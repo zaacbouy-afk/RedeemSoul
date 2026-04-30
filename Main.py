@@ -28,10 +28,12 @@ class WindowManager:
                 except Exception:
                     pass
     
-    def OpenBrowser(self, url: str, newWin: bool = True):
+    def OpenBrowser  (self, input : str ='about:blank'):
 
-        if not url.startswith('http'):
-            url = 'https://' + url
+        if input.startswith('http') or '.' in input:
+            url=input if input.startswith('http') else 'https://' + input
+        else:
+            url = 'https://www.google.com/search?q=' + input.replace(' ', '+')
 
         browsers = ['brave', 'brave-browser', 'google-chrome', 'firefox', 'msedge']
             
@@ -39,7 +41,7 @@ class WindowManager:
         for name in browsers:
             path = shut.which(name)
             if path:
-                subp.Popen([path, '--new-window', '--', url])
+                subp.Popen([path, '--new-window', url])
                 return
             
             # fallback for Windows where browsers aren't on PATH
@@ -55,11 +57,24 @@ class WindowManager:
             ]
         for path in windows_paths:
             if os.path.exists(path):
-                subp.Popen([path, '--new-window', '--', url])
+                subp.Popen([path, '--new-window', url])
                 return
-
+            
         wb.get().open(url)
+            
+
+    def UrlSearch(self,url : str):
         
+        if not url.startswith('http'):
+            url = 'https://' + url
+        
+        wb.open_new_tab(url)
+    
+    def QuerySearch(self,query : str):
+
+        url = 'https://www.google.com/search?q=' + query.replace(' ', '+')
+
+        wb.open_new_tab(url)
 
 class KeyBoardManager:
 
@@ -95,11 +110,9 @@ class Main:
             if key=='s':
                 self.RefreshWin()
                 self.WindowManage.CloseWin()
-            elif key == 'd':
-                self.WindowManage.OpenBrowser('google.com')
-        
-
-
-
+                self.WindowManage.OpenBrowser('wow so cool')
+                self.WindowManage.UrlSearch('outlook.com')
+                self.WindowManage.QuerySearch('how to pet my dog')
+            
 m1=Main()
 m1.run()
