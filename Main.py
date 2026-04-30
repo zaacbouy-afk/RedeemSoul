@@ -109,9 +109,12 @@ class Main: # where run() happens
             if key=='s': # default failsafe key (customisable) 
                 self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
                 self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                time.sleep(0.1) # CANNOT BE CHANGED FOR FUNCTIONALITY
+                time.sleep(0.5) # CANNOT BE CHANGED FOR FUNCTIONALITY
+                ## For every new tab you want to open, add time.sleep(0.1) to make sure that the tabs appear in the right order
                 self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
+                time.sleep(0.1)
                 self.WindowManage.UrlSearch('outlook.com') # default (customisable)
+                time.sleep(0.1)
                 self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
                 # add more if you want to !
                 break
