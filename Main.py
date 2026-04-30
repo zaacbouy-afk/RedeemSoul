@@ -6,7 +6,7 @@ import shutil as shut
 import subprocess as subp
 import os
 
-allWin = [] # stores all windows in an empty array, so it can be updated
+allWin = [] # stores all windows in an empty list, so it can be updated
 
 EXCEPTIONS = {
     "Program Manager",
@@ -75,12 +75,12 @@ class WindowManager: # manages windows and their state in general in this progra
         url = 'https://www.google.com/search?q=' + query.replace(' ', '+')
         wb.open_new_tab(url)
 
-class KeyBoardManager:
+class KeyBoardManager: # manages keyboard functions in general (empty idk what to use this for atm)
 
     def __init__(self):
         pass
 
-class KeyListener:
+class KeyListener: # listens to keys being pressed so that it can do actions in run()
     
     def __init__(self):
         pass
@@ -93,7 +93,7 @@ class KeyListener:
                 if triggerKey is None or event.name == triggerKey:
                     return event.name  
 
-class Main:
+class Main: # where run() happens
 
     def RefreshWin(self):
         global allWin
