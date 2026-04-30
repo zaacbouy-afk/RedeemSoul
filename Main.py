@@ -89,7 +89,7 @@ class KeyListener: # listens to keys being pressed so that it can do actions in 
         while True:
             event = kb.read_event()
             if event.event_type == 'down':
-                print("Pressed:",event.name) #debug purposes
+                #print("Pressed:",event.name) #debug purposes (uncomment if u want to see what key is being pressed realtime)
                 if triggerKey is None or event.name == triggerKey:
                     return event.name  
 

@@ -2,7 +2,7 @@
 
 a lightweight python tool that closes all your open windows and launches a fresh browser session with your preset tabs.
 
-## installation
+## Installation
 
 paste this in cmd/powershell:
 
@@ -10,7 +10,7 @@ paste this in cmd/powershell:
 pip install pygetwindow keyboard
 ```
 
-## getting started
+## Getting started
 
 open `Main.py` and scroll to `run()` — that's the only section you need to touch.
 
@@ -32,11 +32,11 @@ EXCEPTIONS = {
 }
 ```
 
-## notes
+## Notes
 
 - Windows only
 - tested on Brave, Chrome, Firefox and Edge
 
-## feedback & feature requests
+## Feedback & Feature requests
 
 found a bug or got a feature idea? open an [issue](https://github.com/zaacbouy-afk/RedeemSoul/issues) and i'll take a look!
