@@ -5,9 +5,13 @@ import webbrowser as wb
 import shutil as shut
 import subprocess as subp
 import os
+import AppOpener
 
-allWin = [] # stores all windows in an empty list, so it can be updated
 
+# hotkey settings
+TRIGGER_KEY = 's'
+
+# windows with these words in the title will not be closed
 EXCEPTIONS = {
     "Program Manager",
     "Windows Input Experience",
@@ -15,37 +19,56 @@ EXCEPTIONS = {
     "Visual Studio Code",
 }
 
-class WindowManager: # manages windows and their state in general in this program
-    
+# first browser page to open
+FIRST_BROWSER_PAGE = 'cats are cool'
+
+# extra browser tabs to open after the first page
+TABS_TO_OPEN = [
+    ('url', 'gmail.com'),
+    ('url', 'youtube.com'),
+    ('query', 'how to pet your dog'),
+]
+
+# apps to open after the browser tabs
+APPS_TO_OPEN = [
+    'spotify',
+]
+
+# browser title words used to find and maximize the browser window
+BROWSER_TITLES = ['Brave', 'Chrome', 'Firefox', 'Edge']
+
+
+class WindowManager:  # manages windows and their state in general in this program
+
     def __init__(self):
         pass
 
+    # close every window except protected windows
     def CloseWin(self):
-        for window in allWin:
-            if window.title and not any(exc in window.title for exc in EXCEPTIONS): # closes everything but exception (if it contains part of exception strings)
+        for window in gw.getAllWindows():
+            if window.title and not any(exc in window.title for exc in EXCEPTIONS):
                 try:
                     window.close()
                 except Exception:
                     pass
-    
-    def OpenBrowser  (self, input : str ='about:blank'):
 
-        if input.startswith('http') or '.' in input:  # used for the checking the search type and making the first tab the correct search type
-            url=input if input.startswith('http') else 'https://' + input
+    # open the first browser window as either a website or google search
+    def OpenBrowser(self, input: str = 'about:blank'):
+        if input.startswith('http') or '.' in input:
+            url = input if input.startswith('http') else 'https://' + input
         else:
             url = 'https://www.google.com/search?q=' + input.replace(' ', '+')
 
+        # try browser command names first
         browsers = ['brave', 'brave-browser', 'google-chrome', 'firefox', 'msedge']
-            
-        # try shutil.which first
+
         for name in browsers:
             path = shut.which(name)
             if path:
                 subp.Popen([path, '--new-window', url])
                 return
-            
-            # fallback for Windows where browsers arent on PATH
 
+        # fallback for Windows where browsers are not on PATH
         windows_paths = [
             os.path.expandvars(r'%LOCALAPPDATA%\BraveSoftware\Brave-Browser\Application\brave.exe'),
             os.path.expandvars(r'%PROGRAMFILES%\BraveSoftware\Brave-Browser\Application\brave.exe'),
@@ -54,66 +77,103 @@ class WindowManager: # manages windows and their state in general in this progra
             os.path.expandvars(r'%PROGRAMFILES%\Mozilla Firefox\firefox.exe'),
             os.path.expandvars(r'%PROGRAMFILES(X86)%\Mozilla Firefox\firefox.exe'),
             os.path.expandvars(r'%PROGRAMFILES(X86)%\Microsoft\Edge\Application\msedge.exe'),
-            ]
-        
+        ]
+
         for path in windows_paths:
             if os.path.exists(path):
                 subp.Popen([path, '--new-window', url])
                 return
-            
-        wb.get().open(url) # last fallback opening a new tab instead of window 
-            
 
-    def UrlSearch(self,url : str):
-        
+        wb.get().open(url)  # last fallback: may open a tab instead of a window
+
+    # find a window by title and maximize it
+    def WindowMaximise(self, title_options):
+        for window in gw.getAllWindows():
+            if any(title in window.title for title in title_options):
+                window.maximize()
+                return
+
+    # open a website in a new browser tab
+    def UrlSearch(self, url: str):
         if not url.startswith('http'):
             url = 'https://' + url
         wb.open_new_tab(url)
-    
-    def QuerySearch(self,query : str):
 
+    # open a google search in a new browser tab
+    def QuerySearch(self, query: str):
         url = 'https://www.google.com/search?q=' + query.replace(' ', '+')
         wb.open_new_tab(url)
 
-class KeyBoardManager: # manages keyboard functions in general (empty idk what to use this for atm)
+    # open an app and maximize it when the window appears
+    def OpenApp(self, app: str):
+        AppOpener.open(app)
+        start = time.time()
+
+        while time.time() - start < 5:
+            for window in gw.getAllWindows():
+                if app.lower() in window.title.lower():
+                    window.maximize()
+                    return
+
+            time.sleep(0.2)
+
+
+class KeyBoardManager:  # manages keyboard functions in general (empty idk what to use this for atm)
 
     def __init__(self):
         pass
 
-class KeyListener: # listens to keys being pressed so that it can do actions in run()
-    
+
+class KeyListener:  # listens to keys being pressed so that it can do actions in run()
+
     def __init__(self):
         pass
-    
+
+    # wait until any key or the chosen trigger key is pressed
     def StartListen(self, triggerKey=None):
         while True:
             event = kb.read_event()
             if event.event_type == 'down':
                 #print("Pressed:",event.name) #debug purposes (uncomment if u want to see what key is being pressed realtime)
                 if triggerKey is None or event.name == triggerKey:
-                    return event.name  
+                    return event.name
 
-class Main: # where run() happens
 
-    def RefreshWin(self):
-        global allWin
-        allWin = gw.getAllWindows() # updates all current windows when called
+class Main:  # where run() happens
 
-    def __init__(self): # calling the classes into 'Main' class
-        self.WindowManage=WindowManager()
-        self.keyl=KeyListener()
-    
-    def run(self): # Customisable section
+    def __init__(self):  # calling the classes into 'Main' class
+        self.WindowManage = WindowManager()
+        self.keyl = KeyListener()
+
+    # main hotkey routine
+    def run(self):
         while True:
-            key = self.keyl.StartListen(None)
-            if key=='s': # default failsafe key (customisable) 
-                self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
-                self.WindowManage.UrlSearch('outlook.com') # default (customisable)
-                self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
-                # add more if you want to !
+            key = self.keyl.StartListen(TRIGGER_KEY)
+
+            if key == TRIGGER_KEY:
+                self.WindowManage.CloseWin()
+                time.sleep(0.5)
+
+                self.WindowManage.OpenBrowser(FIRST_BROWSER_PAGE)
+                time.sleep(0.5)
+
+                self.WindowManage.WindowMaximise(BROWSER_TITLES)
+
+                for searchType, searchContent in TABS_TO_OPEN:
+                    time.sleep(0.1)
+
+                    if searchType == 'url':
+                        self.WindowManage.UrlSearch(searchContent)
+                    else:
+                        self.WindowManage.QuerySearch(searchContent)
+
+                for app in APPS_TO_OPEN:
+                    time.sleep(0.1)
+                    self.WindowManage.OpenApp(app)
+
                 break
-            
-m1=Main()
+
+
+# start program
+m1 = Main()
 m1.run()
