@@ -107,15 +107,19 @@ class Main: # where run() happens
         while True:
             key = self.keyl.StartListen(None)
             if key=='s': # default failsafe key (customisable) 
-                self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
-                time.sleep(0.5) # CANNOT BE CHANGED FOR FUNCTIONALITY
-                ## For every new tab you want to open, add time.sleep(0.1) to make sure that the tabs appear in the right order
-                self.WindowManage.OpenBrowser('wow so cool') # default (customisable)
+                self.WindowManage.OpenBrowser('youtube.com') # default (customisable)
+                time.sleep(0.5) # waits for browser to open before maximising
+                allWin = gw.getAllWindows() # refreshes window list to find the new browser window
+                for window in allWin:
+                    if any(b in window.title for b in ['Brave', 'Chrome', 'Firefox', 'Edge']): # finds the browser window universally
+                        window.maximize() # maximises it
+                        break # stops looking once found
                 time.sleep(0.1)
-                self.WindowManage.UrlSearch('outlook.com') # default (customisable)
+                self.WindowManage.UrlSearch('gmail.com') # default (customisable)
                 time.sleep(0.1)
                 self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
+                time.sleep(0.1)
+                self.WindowManage.UrlSearch('outlook.com') # default (customisable)
                 # add more if you want to !
                 break
             
