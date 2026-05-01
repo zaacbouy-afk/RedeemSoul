@@ -1,54 +1,89 @@
 # RedeemSoul
-a tool that closes all your open windows and opens a fresh browser with your chosen tabs — all with one keypress.
+
+a Windows hotkey tool that closes your open windows, opens a fresh browser setup, and launches your chosen apps with one keypress.
 
 ## installation
-**step 1** — download the code by clicking the green `code` button at the top of this page, then `download ZIP`. extract it anywhere on your computer.
 
-**step 2** — open cmd or powershell and paste this:
-```
+**step 1** - download the code by clicking the green `Code` button at the top of this page, then `Download ZIP`. extract it anywhere on your computer.
+
+**step 2** - open cmd or powershell and paste this:
+
+```bash
 pip install pygetwindow keyboard appopener
 ```
 
-**step 3** — rename `Main.py` to `Main.pyw` so you can run it by just double clicking it with no console window popping up.
+**step 3** - rename `Main.py` to `Main.pyw` so you can run it by double clicking it without a console window popping up.
 
 ## features
-- closes all open windows except ones you want to keep
-- opens a fresh browser window with your preset tabs
+
+- closes all open windows except ones you choose to keep
+- opens a fresh browser window with your chosen first page
 - automatically maximises the browser window
-- supports direct URLs and search queries as tabs
-- can open apps alongside the browser
-- trigger key is customisable (defaults to `s`)
-- add any windows you don't want closed to the `EXCEPTIONS` set at the top of the file
+- opens extra browser tabs from a list
+- can open and maximise apps alongside the browser
+- trigger key is customisable
+- setup is controlled from the settings section at the top of the file
 
 ## customisation
-open `Main.pyw` in any text editor (notepad works fine) and scroll to the `run()` section at the bottom — that's the only part you need to touch.
 
-**trigger key** — defaults to `s`, change it to anything you want:
+open `Main.pyw` in any text editor and edit the settings section near the top of the file.
+
+### trigger key
+
 ```python
-if key == 's':  # change s to any key you want
+TRIGGER_KEY = ']'
 ```
 
-**your tabs** — add or remove lines to control what opens:
-```python
-self.WindowManage.OpenBrowser('youtube.com')       # first tab (can be any website or search)
-self.WindowManage.UrlSearch('outlook.com')         # adds a website as a tab
-self.WindowManage.QuerySearch('python tutorials')  # adds a google search as a tab
-self.WindowManage.OpenApp('spotify')               # opens an app by name
-```
+### windows to keep open
 
-**keeping windows open** — add any window titles you don't want closed:
 ```python
 EXCEPTIONS = {
-    "Visual Studio Code",
-    "your window title here",  # add whatever you want to keep
+    "Program Manager",
+    "Windows Input Experience",
+    "Task Manager",
+    "lovely cat game",
 }
 ```
 
-once you're happy with your setup, just double click `Main.pyw` to run it, then press your trigger key whenever you want to activate it.
+### first browser page
+
+```python
+FIRST_BROWSER_PAGE = 'youtube.com'
+```
+
+### extra tabs
+
+```python
+TABS_TO_OPEN = [
+    'outlook.com',
+    'gmail.com',
+    'github.com/zaacbouy-afk/RedeemSoul',
+]
+```
+
+### apps to open
+
+```python
+APPS_TO_OPEN = [
+    'spotify',
+]
+```
+
+### browser titles
+
+```python
+BROWSER_TITLES = ['Brave', 'Chrome', 'Firefox', 'Edge']
+```
+
+if you use another browser, add its window title to the list.
 
 ## notes
+
 - Windows only
-- works with Brave, Chrome, Firefox and Edge
+- works best with Brave, Chrome, Firefox and Edge
+- app names must roughly match the app's window title for maximising to work
+- some systems may need the script to be run as administrator for global key listening
 
 ## feedback & feature requests
+
 found a bug or want a new feature? open an [issue](https://github.com/zaacbouy-afk/RedeemSoul/issues) and i'll take a look!
