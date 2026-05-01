@@ -5,6 +5,7 @@ import webbrowser as wb
 import shutil as shut
 import subprocess as subp
 import os
+import AppOpener
 
 allWin = [] # stores all windows in an empty list, so it can be updated
 
@@ -28,7 +29,7 @@ class WindowManager: # manages windows and their state in general in this progra
                 except Exception:
                     pass
     
-    def OpenBrowser  (self, input : str ='about:blank'):
+    def OpenBrowser(self, input : str ='about:blank'):
 
         if input.startswith('http') or '.' in input:  # used for the checking the search type and making the first tab the correct search type
             url=input if input.startswith('http') else 'https://' + input
@@ -62,18 +63,20 @@ class WindowManager: # manages windows and their state in general in this progra
                 return
             
         wb.get().open(url) # last fallback opening a new tab instead of window 
-            
 
-    def UrlSearch(self,url : str):
+    def UrlSearch(self, url : str):
         
         if not url.startswith('http'):
             url = 'https://' + url
         wb.open_new_tab(url)
     
-    def QuerySearch(self,query : str):
+    def QuerySearch(self, query : str):
 
         url = 'https://www.google.com/search?q=' + query.replace(' ', '+')
         wb.open_new_tab(url)
+
+    def OpenApp(self, app : str):
+        AppOpener.open(app) # opens any app installed on your pc by name
 
 class KeyBoardManager: # manages keyboard functions in general (empty idk what to use this for atm)
 
@@ -107,6 +110,10 @@ class Main: # where run() happens
         while True:
             key = self.keyl.StartListen(None)
             if key=='s': # default failsafe key (customisable) 
+                self.RefreshWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
+                self.WindowManage.CloseWin() # CANNOT BE CHANGED FOR FUNCTIONALITY
+                time.sleep(0.5) # CANNOT BE CHANGED FOR FUNCTIONALITY
+                ## For every new tab you want to open, add time.sleep(0.1) to make sure that the tabs appear in the right order
                 self.WindowManage.OpenBrowser('youtube.com') # default (customisable)
                 time.sleep(0.5) # waits for browser to open before maximising
                 allWin = gw.getAllWindows() # refreshes window list to find the new browser window
@@ -119,7 +126,7 @@ class Main: # where run() happens
                 time.sleep(0.1)
                 self.WindowManage.QuerySearch('how to pet my dog') # default (customisable)
                 time.sleep(0.1)
-                self.WindowManage.UrlSearch('outlook.com') # default (customisable)
+                self.WindowManage.OpenApp('spotify') # default (customisable)
                 # add more if you want to !
                 break
             
