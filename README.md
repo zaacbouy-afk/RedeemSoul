@@ -31,7 +31,7 @@ open `Main.pyw` in any text editor and edit the settings section near the top of
 ### trigger key
 
 ```python
-TRIGGER_KEY = ']'
+TRIGGER_KEY = 's'
 ```
 
 ### windows to keep open
@@ -48,16 +48,18 @@ EXCEPTIONS = {
 ### first browser page
 
 ```python
-FIRST_BROWSER_PAGE = 'youtube.com'
+FIRST_BROWSER_PAGE = 'cats are cool'
 ```
 
 ### extra tabs
 
+use `'url'` for websites and `'query'` for google searches.
+
 ```python
 TABS_TO_OPEN = [
-    'outlook.com',
-    'gmail.com',
-    'github.com/zaacbouy-afk/RedeemSoul',
+    ('url', 'gmail.com'),
+    ('url', 'youtube.com'),
+    ('query', 'how to pet your dog'),
 ]
 ```
 
@@ -81,9 +83,11 @@ if you use another browser, add its window title to the list.
 
 - Windows only
 - works best with Brave, Chrome, Firefox and Edge
+- the first browser page can be a website or a google search
+- extra tabs use `('url', 'site.com')` or `('query', 'search words')`
 - app names must roughly match the app's window title for maximising to work
 - some systems may need the script to be run as administrator for global key listening
 
 ## feedback & feature requests
 
-found a bug or want a new feature? open an [issue](https://github.com/zaacbouy-afk/RedeemSoul/issues) and i'll take a look!
+found a bug or want a new feature? open an issue on the repo and i'll take a look!
